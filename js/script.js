@@ -15,21 +15,39 @@ const gridObj = {
 
 const snakeObj = {
   position: [20,20],
+  head: document.getElementById('2,3'),
 
   renderSnake: function() {
     let snakeHead = document.getElementById( this.position.toString() );
     console.log(this.position);
-    snakeHead.style.backgroundColor = 'red';
+    snakeHead.classList.add('snake');
   },
 
   moveR: function() {
+    let snakeHead = document.getElementById( this.position.toString() );
+    snakeHead.classList.remove('snake');
     this.position[1]++;
-    this.renderSnake;
+    this.renderSnake();
   }
 
 };
 
 window.onload = () => {
   gridObj.renderGrid();
-  // snakeObj.renderSnake();
+  snakeObj.renderSnake();
 };
+
+document.addEventListener('keydown', function(key) {
+  key = key || window.event;
+  // console.log(key.keyCode);
+  if (key.keyCode == '38') { // up arrow
+    console.log('up');
+  } else if (key.keyCode == '39') { // right arrow
+    console.log('right');
+    snakeObj.moveR();
+  } else if (key.keyCode == '40') { // down arrow
+    console.log('down');
+  } else if (key.keyCode == '37') {
+    console.log('left');
+  }
+});
