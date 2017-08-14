@@ -1,5 +1,4 @@
 const contentElement = document.getElementById('content');
-const pauseButton = document.getElementById('pause');
 const startButton = document.getElementById('start');
 
 const gridObj = {
@@ -27,15 +26,15 @@ const snakeObj = {
   },
 
   move: function() {
-
-
     document.addEventListener('keydown', function(key) {
       key = key || window.event;
+      console.log(key.keyCode);
       if (key.keyCode === 37 || key.keyCode == 38 || key.keyCode == 39 || key.keyCode == 40) {
         snakeObj.direction = key.keyCode;
+      } else if (key.keyCode === 32) { // spacebar pauses the game
+        clearInterval(interval);
       }
     });
-
 
     let snakeTailId = this.position[this.position.length - 1].toString();
     document.getElementById(snakeTailId).style.backgroundColor = 'white';
@@ -54,6 +53,7 @@ const snakeObj = {
       this.position.unshift( [ this.position[0][0], this.position[0][1] - 1 ] );
     }
     this.render();
+    console.log(interval);
   },
 };
 
@@ -61,10 +61,6 @@ const snakeObj = {
 
 startButton.addEventListener('click', () => {
   interval = setInterval(() => { snakeObj.move() }, 200);
-});
-
-pauseButton.addEventListener('click', () => {
-  clearInterval(interval);
 });
 
 gridObj.render();
