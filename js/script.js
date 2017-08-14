@@ -16,18 +16,20 @@ const gridObj = {
 };
 
 const snakeObj = {
-  position: [20,20],
+  position: [ [20,20], [20,19], [20,18] ],
   direction: 39,
 
   render: function() {
-    let snakeHead = document.getElementById( this.position.toString() );
-    console.log(this.position);
-    snakeHead.style.backgroundColor = 'red';
+    this.position.forEach( (item) => {
+      let box = document.getElementById(item.toString());
+      box.style.backgroundColor = 'red';
+    });
   },
 
   move: function() {
-    let snakeHead = document.getElementById( this.position.toString() );
-    snakeHead.style.backgroundColor = 'white';
+    let snakeTailId = this.position[this.position.length - 1].toString();
+    document.getElementById(snakeTailId).style.backgroundColor = 'white';
+    console.log(snakeTailId);
 
     document.addEventListener('keydown', function(key) {
       key = key || window.event;
@@ -37,25 +39,19 @@ const snakeObj = {
     });
 
     if (this.direction === 38) { // up
-      this.position[0]--;
+      this.position.forEach( (item) => { item[0]--; });
     } else if (this.direction === 39) { // right
-      snakeObj.position[1]++;
+      this.position.forEach( (item) => { item[1]++; });
     } else if (this.direction === 40) { // down
-      snakeObj.position[0]++;
+      this.position.forEach( (item) => { item[0]++; });
     } else if (this.direction === 37) { // left
-      snakeObj.position[1]--;
+      this.position.forEach( (item) => { item[1]--; });
     }
-
     this.render();
-  }
-
+  },
 };
 
-
-
-gridObj.render();
-
-let interval = setInterval(() => { snakeObj.move() }, 200);
+// listenerstimer, and rendering
 
 startButton.addEventListener('click', () => {
   interval = setInterval(() => { snakeObj.move() }, 200);
@@ -64,3 +60,6 @@ startButton.addEventListener('click', () => {
 pauseButton.addEventListener('click', () => {
   clearInterval(interval);
 });
+
+gridObj.render();
+let interval = setInterval(() => { snakeObj.move() }, 200);
