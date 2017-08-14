@@ -27,9 +27,7 @@ const snakeObj = {
   },
 
   move: function() {
-    let snakeTailId = this.position[this.position.length - 1].toString();
-    document.getElementById(snakeTailId).style.backgroundColor = 'white';
-    console.log(snakeTailId);
+
 
     document.addEventListener('keydown', function(key) {
       key = key || window.event;
@@ -40,14 +38,28 @@ const snakeObj = {
 
     if (this.direction === 38) { // up
       this.position.forEach( (item) => { item[0]--; });
+
     } else if (this.direction === 39) { // right
-      this.position.forEach( (item) => { item[1]++; });
+      this.position.forEach( (item) => {
+        let snakeTailId = this.position[this.position.length - 1].toString();
+        document.getElementById(snakeTailId).style.backgroundColor = 'white';
+        item[1]++;
+        this.render();
+      });
+
     } else if (this.direction === 40) { // down
       this.position.forEach( (item) => { item[0]++; });
+
     } else if (this.direction === 37) { // left
-      this.position.forEach( (item) => { item[1]--; });
+
+      this.position.reverse().forEach( (item) => {
+        let snakeTailId = this.position[0].toString();
+        document.getElementById(snakeTailId).style.backgroundColor = 'white';
+        item[1]--;
+        this.render();
+      });
     }
-    this.render();
+
   },
 };
 
