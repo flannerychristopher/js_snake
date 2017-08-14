@@ -1,20 +1,35 @@
-window.onload = function() {
-  let contentElement = document.getElementById('content');
+const contentElement = document.getElementById('content');
 
-  (function render() {
-    for (i = 0; i < 1600; i++) {
-      let divElement = document.createElement('div');
-      divElement.id = 'box' + i;
-      // divElement.style.display = 'inline-block';
-      divElement.style.float = 'left';
-      divElement.style.border = '.2px solid black';
-      // divElement.style.color = 'black';
-      divElement.style.height = '20px';
-      divElement.style.width = '20px';
-
-
-      contentElement.appendChild(divElement);
+const gridObj = {
+  renderGrid: function() {
+    for (let x =  0; x < 40; x++) {
+      for (let y = 0; y < 40; y++) {
+        let divElement = document.createElement('div');
+        divElement.id = `${x},${y}`;
+        divElement.classList.add('box');
+        contentElement.appendChild(divElement);
+      }
     }
-  })();
+  }
+};
 
-}
+const snakeObj = {
+  position: [20,20],
+
+  renderSnake: function() {
+    let snakeHead = document.getElementById( this.position.toString() );
+    console.log(this.position);
+    snakeHead.style.backgroundColor = 'red';
+  },
+
+  moveR: function() {
+    this.position[1]++;
+    this.renderSnake;
+  }
+
+};
+
+window.onload = () => {
+  gridObj.renderGrid();
+  // snakeObj.renderSnake();
+};
