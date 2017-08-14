@@ -36,30 +36,24 @@ const snakeObj = {
       }
     });
 
+
+    let snakeTailId = this.position[this.position.length - 1].toString();
+    document.getElementById(snakeTailId).style.backgroundColor = 'white';
+    this.position.pop();
+
     if (this.direction === 38) { // up
-      this.position.forEach( (item) => { item[0]--; });
+      this.position.unshift( [ this.position[0][0] - 1, this.position[0][1] ] );
 
     } else if (this.direction === 39) { // right
-      this.position.forEach( (item) => {
-        let snakeTailId = this.position[this.position.length - 1].toString();
-        document.getElementById(snakeTailId).style.backgroundColor = 'white';
-        item[1]++;
-        this.render();
-      });
+      this.position.unshift( [ this.position[0][0], this.position[0][1] + 1 ] );
 
     } else if (this.direction === 40) { // down
-      this.position.forEach( (item) => { item[0]++; });
+      this.position.unshift( [ this.position[0][0] + 1, this.position[0][1] ] );
 
     } else if (this.direction === 37) { // left
-
-      this.position.reverse().forEach( (item) => {
-        let snakeTailId = this.position[0].toString();
-        document.getElementById(snakeTailId).style.backgroundColor = 'white';
-        item[1]--;
-        this.render();
-      });
+      this.position.unshift( [ this.position[0][0], this.position[0][1] - 1 ] );
     }
-
+    this.render();
   },
 };
 
