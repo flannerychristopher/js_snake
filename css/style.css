@@ -60,18 +60,23 @@ table {
 
 
 
+
 /* custom styling */
+
+body {
+  background: #aaaaaa;
+}
 
 #content {
   width: 800px;
   height: 800px;
   margin: 0 auto;
-  /*background: red;*/
+  background: white;
 }
 
 .box {
   height: 20px;
   width: 20px;
-  border: 1px solid grey;
+  /*border: 1px solid grey;*/
   float: left;
 }
