@@ -88,7 +88,14 @@ const foodObj = {
   },
 
   newRandomLocation: function() {
-    this.location.push( [this.randomNumber(), this.randomNumber()] );
+    this.location = [this.randomNumber(), this.randomNumber()] ;
+  },
+
+  render: function() {
+    this.newRandomLocation();
+    let foodElementId = this.location.toString();
+    let foodElement = document.getElementById(foodElementId);
+    foodElement.style.backgroundColor = '#ec3f3f';
   }
 };
 
