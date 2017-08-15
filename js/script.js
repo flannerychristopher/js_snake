@@ -1,5 +1,4 @@
 const contentElement = document.getElementById('content');
-const startButton = document.getElementById('start');
 
 const gridObj = {
   render: function() {
@@ -21,21 +20,29 @@ const snakeObj = {
   render: function() {
     this.position.forEach( (item) => {
       let box = document.getElementById(item.toString());
-      box.style.backgroundColor = 'red';
+      box.style.backgroundColor = '#75db37';
+    });
+  },
+
+  listen: function() { // listen for keyboard input
+    document.addEventListener('keyup', function(key) {
+      key = key || window.event;
+      // console.log(key.keyCode);
+      if (key.keyCode === 37 || key.keyCode == 38 || key.keyCode == 39 || key.keyCode == 40) {
+        snakeObj.direction = key.keyCode;
+      } else if (key.keyCode === 32) { // spacebar pauses the snake
+        if (intervalOn) {
+          clearInterval(interval);
+          intervalOn = false;
+        } else { // spacebar starts the snake
+          interval = setInterval(() => { snakeObj.move() }, 200);
+          intervalOn = true;
+        }
+      }
     });
   },
 
   move: function() {
-    document.addEventListener('keydown', function(key) {
-      key = key || window.event;
-      console.log(key.keyCode);
-      if (key.keyCode === 37 || key.keyCode == 38 || key.keyCode == 39 || key.keyCode == 40) {
-        snakeObj.direction = key.keyCode;
-      } else if (key.keyCode === 32) { // spacebar pauses the game
-        clearInterval(interval);
-      }
-    });
-
     let snakeTailId = this.position[this.position.length - 1].toString();
     document.getElementById(snakeTailId).style.backgroundColor = 'white';
     this.position.pop();
@@ -52,16 +59,19 @@ const snakeObj = {
     } else if (this.direction === 37) { // left
       this.position.unshift( [ this.position[0][0], this.position[0][1] - 1 ] );
     }
+
+    let snakeHead = this.position[0];
+    if (snakeHead[0] > 40 || snakeHead[1] > 40) {
+      console.log('out');
+    }
+
     this.render();
-    console.log(interval);
   },
 };
 
-// listenerstimer, and rendering
-
-startButton.addEventListener('click', () => {
-  interval = setInterval(() => { snakeObj.move() }, 200);
-});
+// interval and rendering
 
 gridObj.render();
+snakeObj.listen();
 let interval = setInterval(() => { snakeObj.move() }, 200);
+let intervalOn = true;
