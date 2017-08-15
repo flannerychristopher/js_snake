@@ -80,6 +80,18 @@ const snakeObj = {
   },
 };
 
+const foodObj = {
+  location: [],
+
+  randomNumber: function() {
+    return Math.floor(Math.random() * 40);
+  },
+
+  newRandomLocation: function() {
+    this.location.push( [this.randomNumber(), this.randomNumber()] );
+  }
+};
+
 // interval, key handling/listening and rendering
 
 gridObj.render();
