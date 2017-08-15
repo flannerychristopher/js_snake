@@ -1,7 +1,7 @@
 const contentElement = document.getElementById('content');
-
 const scoreElement = document.getElementById('score');
-let score = 0;
+let score = 0,
+    speed = 150;
 
 const gridObj = {
   render: function() {
@@ -41,7 +41,7 @@ const snakeObj = {
   },
 
   start: function() {
-    interval = setInterval( () => { snakeObj.move() }, 150);
+    interval = setInterval( () => { snakeObj.move() }, speed);
     intervalOn = true;
   },
 
@@ -70,20 +70,22 @@ const snakeObj = {
   },
 
   checkMove: function() { // returns true if move is legal
-    let snakeHead = this.location[0].join(); // head as a string
-    let snakeBody = this.location.slice(1).join('-'); // body as a string
-    let food = foodObj.location.join(); // food location as a string
+    let snakeHead = this.location[0];
+    let snakeBody = this.location.slice(1);
+    let food = foodObj.location;
 
+    // if ( snakeHead[0] > 39 || snakeHead[0] < 0 || snakeHead[1] > 39 || snakeHead[1] < 0 ) {
     if ( snakeHead.includes(40) || snakeHead.includes(-1) ) { // off the board
       return false;
-    } else if (snakeBody.includes(snakeHead)) { // snake hits itself
+    } else if (snakeBody.join(' ').includes(snakeHead.toString())) { // snake hits itself
       return false;
-    } else if (snakeHead === food) { // snake eats food
-      score += 100;
-      scoreElement.textContent = score;
-
+    } else if (snakeHead[0] === food[0] && snakeHead[1] === food[1]) { // snake eats food
+      console.log('munch');
       this.grow();
       foodObj.render();
+      score += 100;
+      scoreElement.textContent = score;
+      speed -= 5;
       return true;
     } else { // normal move
       return true;
@@ -134,7 +136,8 @@ const foodObj = {
 gridObj.render();
 foodObj.render();
 snakeObj.listen();
-let interval = setInterval(() => { snakeObj.move() }, 150);
+scoreElement.textContent = score;
+let interval = setInterval(() => { snakeObj.move() }, speed);
 let intervalOn = true;
 
 // remove later
