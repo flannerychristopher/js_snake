@@ -25,21 +25,37 @@ const snakeObj = {
   },
 
   listen: function() { // listen for keyboard input
-    document.addEventListener('keyup', function(key) {
+    document.addEventListener('keyup', (key) => {
       key = key || window.event;
       // console.log(key.keyCode);
       if (key.keyCode === 37 || key.keyCode == 38 || key.keyCode == 39 || key.keyCode == 40) {
         snakeObj.direction = key.keyCode;
       } else if (key.keyCode === 32) { // spacebar pauses the snake
-        if (intervalOn) {
-          clearInterval(interval);
-          intervalOn = false;
-        } else { // spacebar starts the snake
-          interval = setInterval(() => { snakeObj.move() }, 200);
-          intervalOn = true;
-        }
+        intervalOn ? this.stop() : this.start();
       }
     });
+  },
+
+  start: function() {
+    interval = setInterval( () => { snakeObj.move() }, 200);
+    intervalOn = true;
+  },
+
+  stop: function() {
+    clearInterval(interval);
+    intervalOn = false;
+  },
+
+  checkMove: function() { // returns true if move is legal
+    let snakeHead = this.position[0].join(); // head as a string
+    let snakeBody = this.position.slice(1).join('-'); // body as a string
+    if ( snakeHead.includes(40) || snakeHead.includes(-1) ) { // off the board
+      return false;
+    } else if (snakeBody.includes(snakeHead)) { // snake hits itself
+      return false;
+    } else {
+      return true;
+    }
   },
 
   move: function() {
@@ -60,16 +76,11 @@ const snakeObj = {
       this.position.unshift( [ this.position[0][0], this.position[0][1] - 1 ] );
     }
 
-    let snakeHead = this.position[0];
-    if (snakeHead[0] > 40 || snakeHead[1] > 40) {
-      console.log('out');
-    }
-
-    this.render();
+    this.checkMove() ? this.render() : this.stop();
   },
 };
 
-// interval and rendering
+// interval, key handling/listening and rendering
 
 gridObj.render();
 snakeObj.listen();
