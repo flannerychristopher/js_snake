@@ -52,25 +52,6 @@ const snakeObj = {
     intervalOn = false;
   },
 
-  // grow: function() {
-  //   let snakeTail = this.location[this.location.length - 1];
-  //   let snakeHead = this.location[0];
-  //
-  //   if (this.direction === 38) { // up
-  //     // this.location.push( [ snakeTail[0] + 1, snakeTail[1] ] );
-  //     this.location.unshift( [snakeHead[0] - 1, snakeHead[1]] );
-  //   } else if (this.direction === 39) { // right
-  //     // this.location.push( [ snakeTail[0], snakeTail[1] - 1 ] );
-  //     this.location.unshift( [snakeHead[0], snakeHead[1] + 1] );
-  //   } else if (this.direction === 40) { // down
-  //     // this.location.push( [ snakeTail[0] - 1, snakeTail[1] ] );
-  //     this.location.unshift( [snakeHead[0] + 1, snakeHead[1] ] );
-  //   } else if (this.direction === 37) { // left
-  //     // this.location.push( [ snakeTail[0], snakeTail[1] + 1 ] );
-  //     this.location.unshift( [snakeHead[0], snakeHead[1] - 1] );
-  //   }
-  // },
-
   checkMove: function() { // returns true if move is legal
     let snakeHead = this.location[0];
     let snakeBody = this.location.slice(1);
@@ -79,12 +60,11 @@ const snakeObj = {
     // if ( snakeHead[0] > 39 || snakeHead[0] < 0 || snakeHead[1] > 39 || snakeHead[1] < 0 ) {
     if ( snakeHead.includes(40) || snakeHead.includes(-1) ) { // off the board
       return false;
-    } else if (snakeBody.join(' ').includes(snakeHead.toString())) { // snake hits itself
+    } else if ( snakeBody.join(' ').includes(` ${snakeHead} `) ) { // snake hits itself
       console.log('hit self');
       return false;
     } else if (snakeHead[0] === food[0] && snakeHead[1] === food[1]) { // snake eats food
       console.log('munch');
-      // this.grow();
       foodObj.render();
       score += 100;
       scoreElement.textContent = score;
@@ -94,7 +74,6 @@ const snakeObj = {
       let snakeTailId = this.location[this.location.length - 1].toString();
       document.getElementById(snakeTailId).style.backgroundColor = 'white';
       this.location.pop();
-
       return true;
     }
   },
