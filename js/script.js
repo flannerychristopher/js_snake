@@ -4,7 +4,9 @@ const scoreElement = document.getElementById('score');
 const speedElement = document.getElementById('speed');
 const playElement = document.getElementById('play');
 let score = 0,
-    speed = 150;
+    speed = 150,
+    interval,
+    intervalOn;
 
 const gridObj = {
   render: function() {
@@ -12,7 +14,6 @@ const gridObj = {
       for (let y = 0; y < 40; y++) {
         let divElement = document.createElement('div');
         divElement.id = `${x},${y}`;
-        // divElement.classList.add('box');
         divElement.style.height = '20px';
         divElement.style.width = '20px';
         divElement.style.float = 'left';
@@ -74,7 +75,7 @@ const snakeObj = {
       console.log('munch');
       foodObj.render();
       speed -= 5;
-      speedElement.textContent = (1000 / speed).toFixed(2);
+      speedElement.textContent = (1000 / speed * 20).toFixed(2);
       score += Math.ceil(1000 / speed) * 10;
       scoreElement.textContent = score;
       this.start();
@@ -153,9 +154,6 @@ const foodObj = {
 
 // interval, key handling/listening and rendering
 
-let interval;
-let intervalOn;
-
 snakeObj.listen();
 
 playElement.onclick = function() {
@@ -168,11 +166,10 @@ playElement.onclick = function() {
   score = 0;
   scoreElement.textContent = score;
   speed = 150;
-  speedElement.textContent = '6.66';
+  speedElement.textContent = '133.33';
   playElement.textContent = '';
 
   foodObj.render();
-
 
   interval = setInterval(() => { snakeObj.move() }, speed);
   intervalOn = true;
