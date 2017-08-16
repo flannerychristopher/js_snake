@@ -1,6 +1,8 @@
 const contentElement = document.getElementById('content');
+const gridElement = document.getElementById('grid');
 const scoreElement = document.getElementById('score');
 const speedElement = document.getElementById('speed');
+const playElement = document.getElementById('play');
 let score = 0,
     speed = 150;
 
@@ -10,15 +12,19 @@ const gridObj = {
       for (let y = 0; y < 40; y++) {
         let divElement = document.createElement('div');
         divElement.id = `${x},${y}`;
-        divElement.classList.add('box');
-        contentElement.appendChild(divElement);
+        // divElement.classList.add('box');
+        divElement.style.height = '20px';
+        divElement.style.width = '20px';
+        divElement.style.float = 'left';
+        divElement.style.backgroundColor = '#fff';
+        gridElement.appendChild(divElement);
       }
     }
   }
 };
 
 const snakeObj = {
-  location: [ [20,20], [20,19], [20,18], [20,17], [20,16], [20,15] ],
+  location: [],
   direction: 39,
 
   render: function() {
@@ -82,8 +88,6 @@ const snakeObj = {
   },
 
   move: function() {
-
-
     let snakeHead = this.location[0];
 
     if (this.direction === 38) { // up
@@ -96,8 +100,13 @@ const snakeObj = {
       this.location.unshift( [ snakeHead[0], snakeHead[1] - 1 ] );
     }
 
-    this.checkMove() ? this.render() : this.stop();
+    this.checkMove() ? this.render() : this.gameOver();
   },
+
+  gameOver: function() {
+    this.stop();
+    playElement.textContent = 'game over. play again?';
+  }
 };
 
 const foodObj = {
@@ -108,7 +117,14 @@ const foodObj = {
   },
 
   newRandomLocation: function() {
-    this.location = [this.randomNumber(), this.randomNumber()] ;
+    // this.location = [this.randomNumber(), this.randomNumber()] ;
+    let snakeString = snakeObj.location.join(' ');
+    let newLocation = [this.randomNumber(), this.randomNumber()] ;
+    if ( !snakeString.includes( newLocation.toString() ) ) {
+      this.location = newLocation;
+    } else {
+      this.newRandomLocation();
+    }
   },
 
   render: function() {
@@ -116,18 +132,48 @@ const foodObj = {
     let foodElementId = this.location.toString();
     let foodElement = document.getElementById(foodElementId);
     foodElement.style.backgroundColor = '#ec3f3f';
+  },
+
+  test: function() {
+    let firstNumbers = [];
+    let secondNumbers = [];
+
+    snakeObj.location.forEach ( (item) => {
+
+      if ( !firstNumbers.includes(item[0]) ) firstNumbers.push(item[0]);
+      secondNumbers.push(item[1]);
+      // console.log(item);
+    });
+    console.log(firstNumbers.toString());
+    console.log(secondNumbers.toString());
+
   }
+
 };
 
 // interval, key handling/listening and rendering
 
-gridObj.render();
-foodObj.render();
-snakeObj.listen();
-scoreElement.textContent = score;
-let interval = setInterval(() => { snakeObj.move() }, speed);
-let intervalOn = true;
+let interval;
+let intervalOn;
 
-// to do:
-// grow snake by not removing from it
-// increase speed after eat
+snakeObj.listen();
+
+playElement.onclick = function() {
+  console.log('newgame');
+  snakeObj.location = [ [20,20], [20,19], [20,18], [20,17], [20,16], [20,15] ];
+  snakeObj.direction = 39;
+
+  gridElement.innerHTML = '';
+  gridObj.render();
+  score = 0;
+  scoreElement.textContent = score;
+  speed = 150;
+  speedElement.textContent = '6.66';
+  playElement.textContent = '';
+
+  foodObj.render();
+
+
+  interval = setInterval(() => { snakeObj.move() }, speed);
+  intervalOn = true;
+}
