@@ -74,7 +74,7 @@ const snakeObj = {
     } else if (snakeHead[0] === food[0] && snakeHead[1] === food[1]) { // snake eats food
       console.log('munch');
       foodObj.render();
-      speed -= 5;
+      speed -= 4;
       speedElement.textContent = (1000 / speed * 20).toFixed(2);
       score += Math.ceil(1000 / speed) * 10;
       scoreElement.textContent = score;
@@ -118,7 +118,6 @@ const foodObj = {
   },
 
   newRandomLocation: function() {
-    // this.location = [this.randomNumber(), this.randomNumber()] ;
     let snakeString = snakeObj.location.join(' ');
     let newLocation = [this.randomNumber(), this.randomNumber()] ;
     if ( !snakeString.includes( newLocation.toString() ) ) {
@@ -133,32 +132,17 @@ const foodObj = {
     let foodElementId = this.location.toString();
     let foodElement = document.getElementById(foodElementId);
     foodElement.style.backgroundColor = '#ec3f3f';
-  },
-
-  test: function() {
-    let firstNumbers = [];
-    let secondNumbers = [];
-
-    snakeObj.location.forEach ( (item) => {
-
-      if ( !firstNumbers.includes(item[0]) ) firstNumbers.push(item[0]);
-      secondNumbers.push(item[1]);
-      // console.log(item);
-    });
-    console.log(firstNumbers.toString());
-    console.log(secondNumbers.toString());
-
   }
 
 };
 
-// interval, key handling/listening and rendering
+// key handling/listening and rendering
 
 snakeObj.listen();
 
 playElement.onclick = function() {
   console.log('newgame');
-  snakeObj.location = [ [20,20], [20,19], [20,18], [20,17], [20,16], [20,15] ];
+  snakeObj.location = [ [20,20], [20,19], [20,18], [20,17], [20,16], [20,15], [20,14], [20,13], [20,12] ];
   snakeObj.direction = 39;
 
   gridElement.innerHTML = '';
