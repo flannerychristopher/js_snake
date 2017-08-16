@@ -42,32 +42,34 @@ const snakeObj = {
 
   start: function() {
     interval = setInterval( () => { snakeObj.move() }, speed);
+    console.log('start');
     intervalOn = true;
   },
 
   stop: function() {
     clearInterval(interval);
+    console.log('stop');
     intervalOn = false;
   },
 
-  grow: function() {
-    let snakeTail = this.location[this.location.length - 1];
-    let snakeHead = this.location[0];
-
-    if (this.direction === 38) { // up
-      // this.location.push( [ snakeTail[0] + 1, snakeTail[1] ] );
-      this.location.unshift( [snakeHead[0] - 1, snakeHead[1]] );
-    } else if (this.direction === 39) { // right
-      // this.location.push( [ snakeTail[0], snakeTail[1] - 1 ] );
-      this.location.unshift( [snakeHead[0], snakeHead[1] + 1] );
-    } else if (this.direction === 40) { // down
-      // this.location.push( [ snakeTail[0] - 1, snakeTail[1] ] );
-      this.location.unshift( [snakeHead[0] + 1, snakeHead[1] ] );
-    } else if (this.direction === 37) { // left
-      // this.location.push( [ snakeTail[0], snakeTail[1] + 1 ] );
-      this.location.unshift( [snakeHead[0], snakeHead[1] - 1] );
-    }
-  },
+  // grow: function() {
+  //   let snakeTail = this.location[this.location.length - 1];
+  //   let snakeHead = this.location[0];
+  //
+  //   if (this.direction === 38) { // up
+  //     // this.location.push( [ snakeTail[0] + 1, snakeTail[1] ] );
+  //     this.location.unshift( [snakeHead[0] - 1, snakeHead[1]] );
+  //   } else if (this.direction === 39) { // right
+  //     // this.location.push( [ snakeTail[0], snakeTail[1] - 1 ] );
+  //     this.location.unshift( [snakeHead[0], snakeHead[1] + 1] );
+  //   } else if (this.direction === 40) { // down
+  //     // this.location.push( [ snakeTail[0] - 1, snakeTail[1] ] );
+  //     this.location.unshift( [snakeHead[0] + 1, snakeHead[1] ] );
+  //   } else if (this.direction === 37) { // left
+  //     // this.location.push( [ snakeTail[0], snakeTail[1] + 1 ] );
+  //     this.location.unshift( [snakeHead[0], snakeHead[1] - 1] );
+  //   }
+  // },
 
   checkMove: function() { // returns true if move is legal
     let snakeHead = this.location[0];
@@ -78,24 +80,28 @@ const snakeObj = {
     if ( snakeHead.includes(40) || snakeHead.includes(-1) ) { // off the board
       return false;
     } else if (snakeBody.join(' ').includes(snakeHead.toString())) { // snake hits itself
+      console.log('hit self');
       return false;
     } else if (snakeHead[0] === food[0] && snakeHead[1] === food[1]) { // snake eats food
       console.log('munch');
-      this.grow();
+      // this.grow();
       foodObj.render();
       score += 100;
       scoreElement.textContent = score;
       speed -= 5;
       return true;
     } else { // normal move
+      let snakeTailId = this.location[this.location.length - 1].toString();
+      document.getElementById(snakeTailId).style.backgroundColor = 'white';
+      this.location.pop();
+
       return true;
     }
   },
 
   move: function() {
-    let snakeTailId = this.location[this.location.length - 1].toString();
-    document.getElementById(snakeTailId).style.backgroundColor = 'white';
-    this.location.pop();
+
+
     let snakeHead = this.location[0];
 
     if (this.direction === 38) { // up
@@ -140,4 +146,6 @@ scoreElement.textContent = score;
 let interval = setInterval(() => { snakeObj.move() }, speed);
 let intervalOn = true;
 
-// remove later
+// to do:
+// grow snake by not removing from it
+// increase speed after eat
