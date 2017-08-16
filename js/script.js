@@ -1,5 +1,6 @@
 const contentElement = document.getElementById('content');
 const scoreElement = document.getElementById('score');
+const speedElement = document.getElementById('speed');
 let score = 0,
     speed = 150;
 
@@ -17,7 +18,7 @@ const gridObj = {
 };
 
 const snakeObj = {
-  location: [ [20,20], [20,19], [20,18] ],
+  location: [ [20,20], [20,19], [20,18], [20,17], [20,16], [20,15] ],
   direction: 39,
 
   render: function() {
@@ -41,6 +42,7 @@ const snakeObj = {
   },
 
   start: function() {
+    clearInterval(interval);
     interval = setInterval( () => { snakeObj.move() }, speed);
     console.log('start');
     intervalOn = true;
@@ -57,7 +59,6 @@ const snakeObj = {
     let snakeBody = this.location.slice(1);
     let food = foodObj.location;
 
-    // if ( snakeHead[0] > 39 || snakeHead[0] < 0 || snakeHead[1] > 39 || snakeHead[1] < 0 ) {
     if ( snakeHead.includes(40) || snakeHead.includes(-1) ) { // off the board
       return false;
     } else if ( snakeBody.join(' ').includes(` ${snakeHead} `) ) { // snake hits itself
@@ -66,9 +67,11 @@ const snakeObj = {
     } else if (snakeHead[0] === food[0] && snakeHead[1] === food[1]) { // snake eats food
       console.log('munch');
       foodObj.render();
-      score += 100;
-      scoreElement.textContent = score;
       speed -= 5;
+      speedElement.textContent = (1000 / speed).toFixed(2);
+      score += Math.ceil(1000 / speed) * 10;
+      scoreElement.textContent = score;
+      this.start();
       return true;
     } else { // normal move
       let snakeTailId = this.location[this.location.length - 1].toString();
