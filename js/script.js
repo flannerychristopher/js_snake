@@ -36,13 +36,12 @@ const snakeObj = {
   },
 
   listen: function() { // listen for keyboard input
-    document.addEventListener('keyup', (key) => {
-      key = key || window.event;
-      // console.log(key.keyCode);
-      if (key.keyCode === 37 || key.keyCode == 38 || key.keyCode == 39 || key.keyCode == 40) {
-        snakeObj.direction = key.keyCode;
-      } else if (key.keyCode === 32) { // spacebar pauses the snake
-        console.log('spacebar');
+     document.addEventListener('keydown', (evt) => {
+      evt = evt || window.event;
+      evt.preventDefault();
+      if (evt.key === 'ArrowUp' || evt.key == 'ArrowRight' || evt.key == 'ArrowDown' || evt.key == 'ArrowLeft') {
+        snakeObj.direction = evt.key;
+      } else if (evt.key === 'spacebar') { // spacebar pauses the snake
         intervalOn ? this.stop() : this.start();
       }
     });
@@ -91,13 +90,13 @@ const snakeObj = {
   move: function() {
     let snakeHead = this.location[0];
 
-    if (this.direction === 38) { // up
+    if (this.direction === 'ArrowUp') {
       this.location.unshift( [ snakeHead[0] - 1, snakeHead[1] ] );
-    } else if (this.direction === 39) { // right
+    } else if (this.direction === 'ArrowRight') {
       this.location.unshift( [ snakeHead[0], snakeHead[1] + 1 ] );
-    } else if (this.direction === 40) { // down
+    } else if (this.direction === 'ArrowDown') {
       this.location.unshift( [ snakeHead[0] + 1, snakeHead[1] ] );
-    } else if (this.direction === 37) { // left
+    } else if (this.direction === 'ArrowLeft') {
       this.location.unshift( [ snakeHead[0], snakeHead[1] - 1 ] );
     }
 
@@ -143,7 +142,7 @@ snakeObj.listen();
 playElement.onclick = function() {
   console.log('newgame');
   snakeObj.location = [ [20,20], [20,19], [20,18], [20,17], [20,16], [20,15], [20,14], [20,13], [20,12] ];
-  snakeObj.direction = 39;
+  snakeObj.direction = 'ArrowRight';
 
   gridElement.innerHTML = '';
   gridObj.render();
@@ -155,6 +154,6 @@ playElement.onclick = function() {
 
   foodObj.render();
 
-  interval = setInterval(() => { snakeObj.move() }, speed);
+  interval = setInterval( () => { snakeObj.move() }, speed);
   intervalOn = true;
 }
